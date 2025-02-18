@@ -1,0 +1,46 @@
+# Игнорируем каталоги, создаваемые SBT и Play
+/target/
+/project/target/
+/project/project/
+
+# Логи и временные файлы
+logs/
+*.log
+*.tmp
+
+# Игнорируем файлы IDE (IntelliJ, VS Code, Eclipse и др.)
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+.metals/
+.bloop/
+.bsp/
+.ensime_cache/
+
+# Игнорируем файлы ОС
+.DS_Store
+Thumbs.db
+
+# Файлы сборки и зависимости
+lib_managed/
+src_managed/
+bin/
+dist/
+generated/
+.cache/
+
+# Файлы Play Framework
+conf/application.evolutions
+conf/application.conf.local
+conf/*.secret
+conf/*.override
+
+# Docker и контейнеры
+.dockerignore
+docker-compose.override.yml
+
+# Игнорируем файлы тестов и отчетов
+coverage/
+test-result/
