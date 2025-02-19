@@ -2,16 +2,23 @@ package models
 
 import java.time.LocalDateTime
 
-case class Aircraft(code: String, model: String, range: Float, aircraftClass: Int, velocity: Float)
+final case class AircraftCode(code: String) extends AnyVal
+case class Aircraft(code: AircraftCode, model: String, range: Float, aircraftClass: Int, velocity: Float)
 
-case class Airport(airportCode: String, airportName: String, city: String, airportTz: String,
+final case class AirportCode(airportCode: String) extends AnyVal
+
+case class Airport(airportCode: AirportCode, airportName: String, city: String, airportTz: String,
                    continent: String, isoCountry: String, isoRegion: String, intnl: Boolean,
                    updateTs: LocalDateTime)
 
-case class Flight(flightId: Int, flightNo: String, scheduledDeparture: LocalDateTime,
-                  scheduledArrival: LocalDateTime, departureAirport: Airport, arrivalAirport: Airport,
-                  status: String, aircraft: Aircraft, actualDeparture: LocalDateTime,
+final case class FlightId(flightId: Int) extends AnyVal
+
+case class Flight(flightId: FlightId, flightNo: String, scheduledDeparture: LocalDateTime,
+                  scheduledArrival: LocalDateTime, departureAirport: AirportCode, arrivalAirport: AirportCode,
+                  status: String, aircraftCode: AircraftCode, actualDeparture: LocalDateTime,
                   actualArrival: LocalDateTime, updateTs: LocalDateTime)
 
-case class BoardingPass(passId: Int, passenger: Passenger, bookingLeg: BookingLeg, seat: String,
+final case class BoardingPassId(passId: Int) extends AnyVal
+
+case class BoardingPass(passId: BoardingPassId, passenger: PassengerId, bookingLeg: BookingLegId, seat: String,
                         boardingTime: LocalDateTime, precheck: Boolean, updateTs: LocalDateTime)
