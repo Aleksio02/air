@@ -1,9 +1,10 @@
 package models
 
-import play.api.libs.json.{Format, JsError, JsResult, JsString, JsSuccess, JsValue}
+import play.api.libs.json._
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
+import scala.util.{Failure, Success, Try}
 
 object CustomFormats {
 
@@ -14,10 +15,9 @@ object CustomFormats {
 
     override def reads(json: JsValue): JsResult[LocalDateTime] = json match {
       case JsString(value) =>
-        try {
-          JsSuccess(LocalDateTime.parse(value, formatter))
-        } catch {
-          case e: Exception => JsError(s"Invalid date format: $value")
+        Try(LocalDateTime.parse(value, formatter)) match {
+          case Success(dateTime) => JsSuccess(dateTime)
+          case Failure(e) => JsError(s"Invalid date format: $value")
         }
       case _ => JsError("Expected string for LocalDateTime")
     }
