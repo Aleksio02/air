@@ -8,6 +8,7 @@ lazy val root = (project in file("."))
     name := """air""",
     libraryDependencies ++= Seq(
       guice,
-      "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test
+      "org.scalatestplus.play" %% "scalatestplus-play" % "5.1.0" % Test,
+      "org.scalacheck" %% "scalacheck" % "1.14.1" % Test
     )
   )
