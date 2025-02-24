@@ -15,10 +15,9 @@ object CustomFormats {
 
     override def reads(json: JsValue): JsResult[LocalDateTime] = json match {
       case JsString(value) =>
-        Try(LocalDateTime.parse(value, formatter)) match {
-          case Success(dateTime) => JsSuccess(dateTime)
-          case Failure(e) => JsError(s"Invalid date format: $value")
-        }
+        Try(LocalDateTime.parse(value, formatter)).toEither.fold(
+          _ => JsError(s"Invalid date format: $value"),
+          JsSuccess(_))
       case _ => JsError("Expected string for LocalDateTime")
     }
   }
