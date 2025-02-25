@@ -1,8 +1,9 @@
 package controllers
 
+import com.google.inject.Inject
 import play.api.mvc._
 
-import javax.inject._
+
 
 /**
  * This controller creates an `Action` to handle HTTP requests to the

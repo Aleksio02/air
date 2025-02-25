@@ -1,10 +1,10 @@
 package services
 
-import akka.Done
 import cats.data.EitherT
 import com.google.inject.{Inject, Singleton}
 import dao.PhoneDao
 import models.{Phone, PhoneId}
+import org.apache.pekko.Done
 
 import scala.concurrent.{ExecutionContext, Future}
 
@@ -30,9 +30,9 @@ class PhoneService @Inject()(dao: PhoneDao)(implicit
     EitherT(dao.update(update)).value
   }
 
-  /*def delete(id: PasswordRowKey): Future[Either[Throwable, Done]] = {
+  def delete(id: PhoneId): Future[Either[Throwable, Done]] = {
     dao.delete(id)
-  }*/
+  }
 
   def findById(
                 id: PhoneId

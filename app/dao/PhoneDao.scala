@@ -1,8 +1,8 @@
 package dao
 
-import akka.Done
 import com.google.inject.{Inject, Singleton}
 import models.{Phone, PhoneId}
+import org.apache.pekko.Done
 import play.api.db.slick.DatabaseConfigProvider
 
 import scala.concurrent.ExecutionContext
@@ -49,13 +49,12 @@ class PhoneDao @Inject()(
     }
   }
 
-  /*override protected def deleteQuery(id: PhoneId): DBIO[Done] = {
+  override protected def deleteQuery(id: PhoneId): DBIO[Done] = {
     phones
       .filter(_.p.phoneId === id)
-      .map(_.p.deleted)
-      .update(UtcInstant.now.some)
+      .delete
       .map(_ => Done)
-  }*/
+  }
 
   override protected def findByIdQuery(
       id: PhoneId

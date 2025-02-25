@@ -1,17 +1,17 @@
 package controllers
 
-import akka.Done
-import akka.util.ByteString
 import cats.data.EitherT
 import cats.implicits.catsSyntaxOptionId
+import com.google.inject.Inject
 import models.{Phone, PhoneId}
+import org.apache.pekko.Done
+import org.apache.pekko.util.ByteString
 import play.api.http.Writeable
 import play.api.libs.json.{Json, Writes}
 import play.api.mvc._
 import play.mvc.Http.MimeTypes
 import services.PhoneService
 
-import javax.inject._
 import scala.concurrent.ExecutionContext
 
 @Singleton
@@ -46,10 +46,10 @@ class PhoneController @Inject()(
         .fold(t => BadRequest(t.getMessage), Ok(_))
     }
 
-  /*def delete(id: String): Action[AnyContent] = Action.async { _ =>
-    EitherT(phoneService.delete(PasswordRowKey(id)))
+  def delete(id: String): Action[AnyContent] = Action.async { _ =>
+    EitherT(phoneService.delete(PhoneId(Integer.parseInt(id))))
       .fold(t => BadRequest(t.getMessage), Ok(_))
-  }*/
+  }
 
   def findById(id: String): Action[AnyContent] = Action.async { _ =>
     EitherT(phoneService.findById(PhoneId(Integer.parseInt(id))))

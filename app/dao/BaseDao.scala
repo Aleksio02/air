@@ -1,7 +1,8 @@
 package dao
 
-import akka.Done
 import cats.implicits._
+import org.apache.pekko.Done
+
 import scala.concurrent.Future
 
 trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
@@ -31,12 +32,12 @@ trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
     .map(_.asRight)
     .recover(_.asLeft)
 
-  /*protected def deleteQuery(id: DbEntityId): DBIO[Done]
+  protected def deleteQuery(id: DbEntityId): DBIO[Done]
 
   def delete(id: DbEntityId): Future[Either[Throwable, Done]] = db
     .run(deleteQuery(id))
     .map(_.asRight)
-    .recover(_.asLeft)*/
+    .recover(_.asLeft)
 
   protected def findByIdQuery(id: DbEntityId): DBIO[Option[DbEntity]]
 

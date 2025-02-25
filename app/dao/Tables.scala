@@ -50,7 +50,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Option[LocalDateTime]
         ),
       Phone
-    ](LiftedDbPhoneRow.tupled, Phone.tupled)
+    ](LiftedDbPhoneRow.tupled, (Phone.apply _).tupled)
 
   implicit class ILikeImpl(private val s: Rep[String]) {
     def ilike(p: Rep[String]): Rep[Boolean] = {
@@ -67,11 +67,11 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
   class Phones(tag: Tag) extends Table[Phone](tag, "phone") {
     def p: LiftedDbPhoneRow = LiftedDbPhoneRow(
       phoneId = column[PhoneId]("phone_id", O.PrimaryKey),
-      accountId = column[Option[AccountId]]("account_id"),
-      phone = column[Option[String]]("phone"),
-      phoneType = column[Option[String]]("phone_type"),
-      primaryPhone = column[Option[Boolean]]("primary_phone"),
-      updateTs = column[Option[LocalDateTime]]("update_ts")
+      accountId = column[AccountId]("account_id").?,
+      phone = column[String]("phone").?,
+      phoneType = column[String]("phone_type").?,
+      primaryPhone = column[Boolean]("primary_phone").?,
+      updateTs = column[LocalDateTime]("update_ts").?
     )
 
     def * : lifted.ProvenShape[Phone] = p
