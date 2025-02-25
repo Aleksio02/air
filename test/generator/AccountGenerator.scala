@@ -3,7 +3,7 @@ package generator
 import models._
 import org.scalacheck.Gen
 
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, OffsetDateTime}
 import java.time.format.DateTimeFormatter
 import scala.util.Random
 
@@ -50,10 +50,12 @@ object PassengerGenerator {
 object PhoneGenerator {
   val gen: Gen[Phone] = {
     for {
-      i <- Gen.chooseNum(0, 100)
+      i <- Gen.chooseNum(0, 10).map(PhoneId(_))
+      n <- Gen.chooseNum(0, 10)
+      m <- Gen.identifier
     } yield {
-      Phone(PhoneId(i), Option(AccountId(i)), Option(s"${i+1000}"), Option("mobile"), Option(true),
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
+      Phone(PhoneId(i), Option(AccountId(n)), Option(s"${i+1000}"), Option("mobile"),
+        Option(true), Option(OffsetDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
     }
   }
 }

@@ -2,13 +2,12 @@ package dao
 
 import dao.model.lifted.LiftedDbPhoneRow
 import models.{AccountId, Phone, PhoneId}
-import models.CustomFormats._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 import slick.lifted
 
 import java.sql.Timestamp
-import java.time.{LocalDateTime, ZoneId}
+import java.time.{Instant, OffsetDateTime, ZoneId}
 import scala.concurrent.ExecutionContext
 
 trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
@@ -17,10 +16,10 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import profile.api._
 
-  implicit val timeMapping: BaseColumnType[LocalDateTime] =
-    MappedColumnType.base[LocalDateTime, Timestamp](
-      t => new Timestamp(t.atZone(ZoneId.systemDefault()).toEpochSecond),
-      ts => ts.toLocalDateTime
+  implicit val timeMapping: BaseColumnType[OffsetDateTime] =
+    MappedColumnType.base[OffsetDateTime, Timestamp](
+      t => new Timestamp(t.toEpochSecond),
+      ts => OffsetDateTime.ofInstant(Instant.ofEpochMilli(ts.getTime), ZoneId.systemDefault())
     )
 
   implicit val phoneIdRowKeyMapping: BaseColumnType[PhoneId] =
@@ -38,7 +37,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Rep[Option[String]],
           Rep[Option[String]],
           Rep[Option[Boolean]],
-          Rep[Option[LocalDateTime]]
+          Rep[Option[OffsetDateTime]]
         ),
       LiftedDbPhoneRow,
       (
@@ -47,7 +46,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Option[String],
           Option[String],
           Option[Boolean],
-          Option[LocalDateTime]
+          Option[OffsetDateTime]
         ),
       Phone
     ](LiftedDbPhoneRow.tupled, (Phone.apply _).tupled)
@@ -71,7 +70,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
       phone = column[String]("phone").?,
       phoneType = column[String]("phone_type").?,
       primaryPhone = column[Boolean]("primary_phone").?,
-      updateTs = column[LocalDateTime]("update_ts").?
+      updateTs = column[OffsetDateTime]("update_ts").?
     )
 
     def * : lifted.ProvenShape[Phone] = p

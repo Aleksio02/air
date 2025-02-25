@@ -37,7 +37,11 @@ class PhoneService @Inject()(dao: PhoneDao)(implicit
   def findById(
                 id: PhoneId
               ): Future[Either[Throwable, Option[Phone]]] = {
-    EitherT(dao.findById(id)).value
+    println(id)
+    EitherT(dao.findById(id)).value.map(x => {
+      println(x)
+      x
+    })
   }
 
   /*def findByName(

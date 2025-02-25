@@ -2,7 +2,7 @@ package controllers
 
 import cats.data.EitherT
 import cats.implicits.catsSyntaxOptionId
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import models.{Phone, PhoneId}
 import org.apache.pekko.Done
 import org.apache.pekko.util.ByteString

@@ -1,6 +1,6 @@
 package controllers
 
-import com.google.inject.Inject
+import com.google.inject.{Inject, Singleton}
 import play.api.mvc._
 
 

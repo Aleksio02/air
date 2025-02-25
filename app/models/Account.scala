@@ -1,9 +1,8 @@
 package models
 
-import play.api.libs.json.{Format, JsPath, Json, Reads, Writes}
-import play.api.libs.functional.syntax._
+import play.api.libs.json.{Format, Json}
 
-import java.time.LocalDateTime
+import java.time.{LocalDateTime, OffsetDateTime}
 
 final case class FrequentFlyerId(frequentFlyerId: Int) extends AnyVal
 
@@ -54,7 +53,7 @@ object PhoneId {
 }
 
 case class Phone(phoneId: PhoneId, accountId: Option[AccountId], phone: Option[String],
-                 phoneType: Option[String], primaryPhone: Option[Boolean], updateTs: Option[LocalDateTime])
+                 phoneType: Option[String], primaryPhone: Option[Boolean], updateTs: Option[OffsetDateTime])
 
 
 object Phone {

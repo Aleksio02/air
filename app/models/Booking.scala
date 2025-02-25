@@ -2,7 +2,7 @@ package models
 
 import play.api.libs.json.{Format, JsPath, Json, Reads, Writes}
 import play.api.libs.functional.syntax._
-import models.CustomFormats2._
+import models.CustomFormats._
 
 import java.time.LocalDateTime
 
