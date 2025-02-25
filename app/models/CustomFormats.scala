@@ -9,7 +9,7 @@ import scala.util.{Failure, Success, Try}
 object CustomFormats {
 
   implicit val localDateTimeFormat: Format[LocalDateTime] = new Format[LocalDateTime] {
-    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+    private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss.SSSSSS'Z'")
 
     override def writes(o: LocalDateTime): JsValue = JsString(o.format(formatter))
 

@@ -1,7 +1,8 @@
 package dao
 
 import dao.model.lifted.LiftedDbPhoneRow
-import models.{AccountId, Phone, PhoneId, CustomFormats}
+import models.{AccountId, Phone, PhoneId}
+import models.CustomFormats._
 import play.api.db.slick.{DatabaseConfigProvider, HasDatabaseConfigProvider}
 import slick.jdbc.JdbcProfile
 import slick.lifted
@@ -27,7 +28,6 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
 
   implicit val accountIdRowKeyMapping: BaseColumnType[AccountId] =
     MappedColumnType.base[AccountId, Int](_.accountId, AccountId(_))
-
 
   implicit object PhoneRowShape
     extends CaseClassShape[
@@ -66,7 +66,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
 
   class Phones(tag: Tag) extends Table[Phone](tag, "phone") {
     def p: LiftedDbPhoneRow = LiftedDbPhoneRow(
-      phoneId = column[PhoneId]("id", O.PrimaryKey),
+      phoneId = column[PhoneId]("phone_id", O.PrimaryKey),
       accountId = column[Option[AccountId]]("account_id"),
       phone = column[Option[String]]("phone"),
       phoneType = column[Option[String]]("phone_type"),
