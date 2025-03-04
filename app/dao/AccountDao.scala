@@ -61,9 +61,9 @@ class AccountDao @Inject()(
                                         id: AccountId
                                       ): DBIO[Option[AccountView]] = {
     val query = accounts
-      .filter(t => t.p.accountId === id)
       .join(frequentFlyers)
       .on(_.p.frequentFlyerId === _.p.frequentFlyerId)
+      .filter(t => t._1.p.accountId === id)
       .map { case (account, frequentFlyer) =>
         LiftedAccountView(
           account.p.frequentFlyerId,
