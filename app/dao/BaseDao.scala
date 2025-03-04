@@ -5,11 +5,11 @@ import org.apache.pekko.Done
 
 import scala.concurrent.Future
 
-trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
+trait BaseDao[DbEntityId, DbEntity, DbEntityView] extends Tables {
 
   import profile.api._
 
-  protected val updater: (DbEntity, DbEntityUpdate) => DbEntity
+  protected val updater: (DbEntity, DbEntity) => DbEntity
 
   protected def createQuery(row: DbEntity): DBIO[DbEntityId]
 
@@ -25,9 +25,9 @@ trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
     .map(_.asRight)
     .recover(_.asLeft)
 
-  def updateQuery(update: DbEntityUpdate): DBIO[DbEntity]
+  def updateQuery(update: DbEntity): DBIO[DbEntity]
 
-  def update(update: DbEntityUpdate): Future[Either[Throwable, DbEntity]] = db
+  def update(update: DbEntity): Future[Either[Throwable, DbEntity]] = db
     .run(updateQuery(update))
     .map(_.asRight)
     .recover(_.asLeft)
@@ -39,9 +39,9 @@ trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
     .map(_.asRight)
     .recover(_.asLeft)
 
-  protected def findByIdQuery(id: DbEntityId): DBIO[Option[DbEntity]]
+  protected def findByIdQuery(id: DbEntityId): DBIO[Option[DbEntityView]]
 
-  def findById(id: DbEntityId): Future[Either[Throwable, Option[DbEntity]]] = db
+  def findById(id: DbEntityId): Future[Either[Throwable, Option[DbEntityView]]] = db
     .run(findByIdQuery(id))
     .map(_.asRight)
     .recover(_.asLeft)
@@ -53,7 +53,7 @@ trait BaseDao[DbEntityId, DbEntity, DbEntityUpdate] extends Tables {
     .map(_.asRight)
     .recover(_.asLeft)*/
 
-  def getById(id: DbEntityId): Future[Either[Throwable, DbEntity]] = db
+  def getById(id: DbEntityId): Future[Either[Throwable, DbEntityView]] = db
     .run(findByIdQuery(id))
     .map(_.toRight(new NoSuchElementException(id.toString)))
     .recover(_.asLeft)

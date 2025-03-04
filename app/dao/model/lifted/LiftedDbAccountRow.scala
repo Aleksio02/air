@@ -1,13 +1,29 @@
 package dao.model.lifted
 
-import models.{AccountId, PhoneId}
+import models.{AccountId, FrequentFlyerId, PhoneId}
 import slick.lifted.Rep
 
 import java.time.OffsetDateTime
 
-class LiftedDbAccountRow {
 
-}
+case class LiftedDbFrequentFlyerRow(frequentFlyerId: Rep[FrequentFlyerId],
+                         firstName: Rep[String],
+                         lastName: Rep[String],
+                         title: Rep[String],
+                         cardNum: Rep[String],
+                         level: Rep[Int],
+                         awardPoints: Rep[Int],
+                         email: Rep[String],
+                         phone: Rep[String],
+                         updateTs: Rep[Option[OffsetDateTime]])
+
+case class LiftedDbAccountRow(
+                               accountId: Rep[AccountId],
+                               login: Rep[String],
+                               firstName: Rep[String],
+                               lastName: Rep[String],
+                               frequentFlyerId: Rep[Option[FrequentFlyerId]],
+                               updateTs: Rep[Option[OffsetDateTime]])
 
 
 case class LiftedDbPhoneRow(
