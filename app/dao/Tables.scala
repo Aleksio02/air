@@ -175,7 +175,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
       login = column[String]("login"),
       firstName = column[String]("first_name"),
       lastName = column[String]("last_name"),
-      frequentFlyerId = column[FrequentFlyerId]("account_id").?,
+      frequentFlyerId = column[FrequentFlyerId]("frequent_flyer_id").?,
       updateTs = column[OffsetDateTime]("update_ts").?
     )
 

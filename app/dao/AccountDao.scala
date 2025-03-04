@@ -60,9 +60,9 @@ class AccountDao @Inject()(
   override def findByIdQuery(
                                         id: AccountId
                                       ): DBIO[Option[AccountView]] = {
-    val query = accounts
+    accounts
       .join(frequentFlyers)
-      .on(_.p.frequentFlyerId === _.p.frequentFlyerId)
+      .on{ case (account, flyer) => account.p.frequentFlyerId === flyer.p.frequentFlyerId }
       .filter(t => t._1.p.accountId === id)
       .map { case (account, frequentFlyer) =>
         LiftedAccountView(
@@ -81,9 +81,6 @@ class AccountDao @Inject()(
       }
       .result
       .headOption
-    query.statements.foreach(println)
-//      .map(_.map(AccountView.tupled))
-    query
   }
 
   /*override protected def findByAccountQuery(
