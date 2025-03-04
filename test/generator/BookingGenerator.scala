@@ -9,11 +9,17 @@ import scala.util.Random
 object BookingGenerator {
   val gen: Gen[Booking] = {
     for {
-      i <- Gen.chooseNum(0, 100)
+      id <- Gen.chooseNum(1, 10).map(BookingId(_))
+      ref <- Gen.identifier
+      name <- Gen.option(Gen.asciiPrintableStr)
+      aId <- Gen.option(Gen.choose(1,5).map(AccountId(_)))
+      em <- Gen.alphaLowerStr
+      ph <- Gen.numStr
+      pr <- Gen.option(Gen.const(6500f))
     } yield {
-      Booking(BookingId(i), "some booking ref", Option("some booking name"), Option(AccountId(i)),
-        s"email${i}@somemail.com", s"${i + 1000}", Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)),
-        Option(6500f))
+      Booking(id, ref, name, aId, em, ph,
+        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)),
+        pr)
     }
   }
 }
@@ -21,10 +27,14 @@ object BookingGenerator {
 object BookingLegGenerator {
   val gen: Gen[BookingLeg] = {
     for {
-      i <- Gen.chooseNum(0, 100)
+      id <- Gen.chooseNum(7, 23).map(BookingLegId(_))
+      bId <- Gen.choose(9, 18).map(BookingId(_))
+      fId <- Gen.const(3).map(FlightId(_))
+      lNum <- Gen.option(Gen.chooseNum(2, 12))
+      isR <- Gen.option(Gen.const(false))
     } yield {
-      BookingLeg(BookingLegId(i), BookingId(i), FlightId(i), Option(i),
-        Option(new Random().nextBoolean()),
+      BookingLeg(id, bId, fId, lNum,
+        isR,
         Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
     }
   }
