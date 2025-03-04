@@ -12,7 +12,7 @@ object FrequentFlyerId {
 
 case class FrequentFlyer(frequentFlyerId: FrequentFlyerId, firstName: String, lastName: String, title: String,
                          cardNum: String, level: Int, awardPoints: Int, email: String, phone: String,
-                         updateTs: Option[LocalDateTime])
+                         updateTs: Option[OffsetDateTime])
 
 object FrequentFlyer {
   implicit val format: Format[FrequentFlyer] = Json.format[FrequentFlyer]
@@ -25,7 +25,7 @@ object AccountId {
 }
 
 case class Account(accountId: AccountId, login: String, firstName: String, lastName: String,
-                   frequentFlyerId: Option[FrequentFlyerId], updateTs: Option[LocalDateTime])
+                   frequentFlyerId: Option[FrequentFlyerId], updateTs: Option[OffsetDateTime])
 
 object Account {
   implicit val format: Format[Account] = Json.format[Account]
