@@ -3,13 +3,21 @@ package generator
 import models._
 import org.scalacheck.Gen
 
-import java.time.{LocalDateTime, OffsetDateTime}
 import java.time.format.DateTimeFormatter
-import scala.util.Random
+import java.time.{Instant, LocalDateTime, OffsetDateTime, ZoneOffset}
 
 object Commons {
-  val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
-  val offsetDateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+  val formatter: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")
+  val offsetDateTimeFormatter: DateTimeFormatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME
+  val genOffsetDateTime: Gen[OffsetDateTime] = for {
+    epochSecond <- Gen.chooseNum(1704067200L, 1735689600L)
+    nano <- Gen.chooseNum(0, 999999999)
+    offset <- Gen.chooseNum(-18, 18).map(ZoneOffset.ofHours)
+  } yield OffsetDateTime.ofInstant(Instant.ofEpochSecond(epochSecond, nano), offset)
+  val optionGenOffsetDateTime: Gen[Option[OffsetDateTime]] = Gen.option(genOffsetDateTime)
+  // TODO: aleksioi: убрать в будущем
+  val genLocalDateTime: Gen[LocalDateTime] = genOffsetDateTime.map(_.toLocalDateTime)
+  val optionGenLocalDateTime: Gen[Option[LocalDateTime]] = Gen.option(genLocalDateTime)
 }
 
 object FrequentFlyerGenerator {
@@ -24,10 +32,9 @@ object FrequentFlyerGenerator {
       ap <- Gen.chooseNum(80, 100)
       em <- Gen.alphaStr
       ph <- Gen.numStr
+      uts <- Commons.optionGenOffsetDateTime
     } yield {
-      FrequentFlyer(id, fn, ln, t,
-        cn, l, ap, em, ph,
-        Option(OffsetDateTime.parse("2011-12-03T10:15:30+01:00", Commons.offsetDateTimeFormatter)))
+      FrequentFlyer(id, fn, ln, t, cn, l, ap, em, ph, uts)
     }
   }
 }
@@ -40,9 +47,9 @@ object AccountGenerator {
       fn <- Gen.alphaStr
       ln <- Gen.alphaStr
       ffId <- Gen.chooseNum(1, 10).map(FrequentFlyerId(_))
+      uts <- Commons.optionGenOffsetDateTime
     } yield {
-      Account(id, l, fn, ln, Option(ffId),
-        Option(OffsetDateTime.parse("2011-12-03T10:15:30+01:00", Commons.offsetDateTimeFormatter)))
+      Account(id, l, fn, ln, Option(ffId), uts)
     }
   }
 }
@@ -57,10 +64,11 @@ object PassengerGenerator {
       fn <- Gen.alphaStr
       ln <- Gen.alphaStr
       aId <- Gen.chooseNum(25, 30).map(AccountId(_))
+      uts <- Commons.optionGenLocalDateTime
       age <- Gen.const(Option(18))
     } yield {
       Passenger(id, bId, Option(bRef), pNo, fn, ln, Option(aId),
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)), age)
+        uts, age)
     }
   }
 }
@@ -75,10 +83,9 @@ object PhoneGenerator {
       ph <- Gen.option(Gen.numStr)
       phType <- Gen.option(Gen.asciiPrintableStr)
       pph <- Gen.option(Gen.const(true))
+      uts <- Commons.optionGenOffsetDateTime
     } yield {
-      // TODO: переписать генератор!!!!
-      Phone(i, aId, ph, phType, pph,
-        Option(OffsetDateTime.parse("2011-12-03T10:15:30+01:00", Commons.offsetDateTimeFormatter)))
+      Phone(i, aId, ph, phType, pph, uts)
     }
   }
 }

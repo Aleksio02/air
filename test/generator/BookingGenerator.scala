@@ -1,10 +1,7 @@
 package generator
 
-import models.{AccountId, Booking, BookingId, BookingLeg, BookingLegId, FlightId}
+import models._
 import org.scalacheck.Gen
-
-import java.time.LocalDateTime
-import scala.util.Random
 
 object BookingGenerator {
   val gen: Gen[Booking] = {
@@ -15,11 +12,10 @@ object BookingGenerator {
       aId <- Gen.option(Gen.choose(1,5).map(AccountId(_)))
       em <- Gen.alphaLowerStr
       ph <- Gen.numStr
+      uts <- Commons.optionGenLocalDateTime
       pr <- Gen.option(Gen.const(6500f))
     } yield {
-      Booking(id, ref, name, aId, em, ph,
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)),
-        pr)
+      Booking(id, ref, name, aId, em, ph, uts, pr)
     }
   }
 }
@@ -32,10 +28,9 @@ object BookingLegGenerator {
       fId <- Gen.const(3).map(FlightId(_))
       lNum <- Gen.option(Gen.chooseNum(2, 12))
       isR <- Gen.option(Gen.const(false))
+      uts <- Commons.optionGenLocalDateTime
     } yield {
-      BookingLeg(id, bId, fId, lNum,
-        isR,
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
+      BookingLeg(id, bId, fId, lNum, isR, uts)
     }
   }
 }

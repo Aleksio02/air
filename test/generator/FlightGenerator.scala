@@ -3,9 +3,6 @@ package generator
 import models._
 import org.scalacheck.Gen
 
-import java.time.LocalDateTime
-import scala.util.Random
-
 object AircraftGenerator {
   val gen: Gen[Aircraft] = {
     for {
@@ -31,9 +28,9 @@ object AirportGenerator {
       isoc <- Gen.option(Gen.const(""))
       isor <- Gen.option(Gen.const(""))
       intnl <- Gen.const(true)
+      uts <- Commons.optionGenLocalDateTime
     } yield {
-      Airport(c, n, ci, tz, co, isoc, isor, intnl,
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
+      Airport(c, n, ci, tz, co, isoc, isor, intnl, uts)
     }
   }
 }
@@ -43,18 +40,17 @@ object FlightGenerator {
     for {
       id <- Gen.chooseNum(1, 10).map(FlightId(_))
       no <- Gen.alphaNumStr
+      schDep <- Commons.genLocalDateTime
+      schArr <- Commons.genLocalDateTime
       apc1 <- Gen.asciiPrintableStr.map(AirportCode(_))
       apc2 <- Gen.asciiPrintableStr.map(AirportCode(_))
       st <- Gen.oneOf("Successfull", "In progress", "Not started", "Cancelled")
       acc <- Gen.hexStr.map(AircraftCode(_))
+      actDep <- Commons.optionGenLocalDateTime
+      actArr <- Commons.optionGenLocalDateTime
+      uts <- Commons.optionGenLocalDateTime
     } yield {
-      Flight(id, no,
-        LocalDateTime.parse("2025-02-07 00:00:00", Commons.formatter),
-        LocalDateTime.parse("2025-02-07 04:00:00", Commons.formatter),
-        apc1, apc2, st, acc,
-        Option(LocalDateTime.parse("2025-02-07 00:06:10", Commons.formatter)),
-        Option(LocalDateTime.parse("2025-02-07 04:10:57", Commons.formatter)),
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
+      Flight(id, no, schDep, schArr, apc1, apc2, st, acc, actDep, actArr, uts)
     }
   }
 }
@@ -66,11 +62,11 @@ object BoardingPassGenerator {
       pId <- Gen.option(Gen.choose(11, 19).map(PassengerId(_)))
       blId <- Gen.option(Gen.choose(11, 19).map(BookingLegId(_)))
       s <- Gen.option(Gen.identifier)
+      bt <- Commons.optionGenLocalDateTime
       pc <- Gen.option(Gen.const(false))
+      uts <- Commons.optionGenLocalDateTime
     } yield {
-      BoardingPass(id, pId, blId, s,
-        Option(LocalDateTime.parse("2025-02-06 23:49:00", Commons.formatter)), pc,
-        Option(LocalDateTime.parse("2025-01-01 00:00:00", Commons.formatter)))
+      BoardingPass(id, pId, blId, s, bt, pc, uts)
     }
   }
 }
