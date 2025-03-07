@@ -53,7 +53,7 @@ object PhoneId {
 }
 
 case class Phone(phoneId: PhoneId, accountId: Option[AccountId], phone: Option[String],
-                 phoneType: Option[String], primaryPhone: Option[Boolean], updateTs: Option[OffsetDateTime])
+                 phoneType: Option[String], primaryPhone: Option[Boolean], updateTs: Option[LocalDateTime])
 
 
 object Phone {

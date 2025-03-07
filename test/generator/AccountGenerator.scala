@@ -15,7 +15,7 @@ object Commons {
     offset <- Gen.chooseNum(-18, 18).map(ZoneOffset.ofHours)
   } yield OffsetDateTime.ofInstant(Instant.ofEpochSecond(epochSecond, nano), offset)
   val optionGenOffsetDateTime: Gen[Option[OffsetDateTime]] = Gen.option(genOffsetDateTime)
-  // TODO: aleksioi: убрать в будущем
+
   val genLocalDateTime: Gen[LocalDateTime] = genOffsetDateTime.map(_.toLocalDateTime)
   val optionGenLocalDateTime: Gen[Option[LocalDateTime]] = Gen.option(genLocalDateTime)
 }
@@ -83,7 +83,7 @@ object PhoneGenerator {
       ph <- Gen.option(Gen.numStr)
       phType <- Gen.option(Gen.asciiPrintableStr)
       pph <- Gen.option(Gen.const(true))
-      uts <- Commons.optionGenOffsetDateTime
+      uts <- Commons.optionGenLocalDateTime
     } yield {
       Phone(i, aId, ph, phType, pph, uts)
     }

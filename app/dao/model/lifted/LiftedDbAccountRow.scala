@@ -3,7 +3,7 @@ package dao.model.lifted
 import models.{AccountId, FrequentFlyerId, PhoneId}
 import slick.lifted.Rep
 
-import java.time.OffsetDateTime
+import java.time.{LocalDateTime, OffsetDateTime}
 
 
 case class LiftedDbFrequentFlyerRow(frequentFlyerId: Rep[FrequentFlyerId],
@@ -32,4 +32,4 @@ case class LiftedDbPhoneRow(
                              phone: Rep[Option[String]],
                              phoneType: Rep[Option[String]],
                              primaryPhone: Rep[Option[Boolean]],
-                             updateTs: Rep[Option[OffsetDateTime]])
+                             updateTs: Rep[Option[LocalDateTime]])

@@ -8,7 +8,7 @@ import slick.jdbc.JdbcProfile
 import slick.lifted
 
 import java.sql.Timestamp
-import java.time.{Instant, OffsetDateTime, ZoneId}
+import java.time.{Instant, LocalDateTime, OffsetDateTime, ZoneId}
 import scala.concurrent.ExecutionContext
 
 trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
@@ -17,10 +17,10 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
 
   import profile.api._
 
-  implicit val timeMapping: BaseColumnType[OffsetDateTime] =
-    MappedColumnType.base[OffsetDateTime, Timestamp](
-      t => new Timestamp(t.toEpochSecond),
-      ts => OffsetDateTime.ofInstant(Instant.ofEpochMilli(ts.getTime), ZoneId.systemDefault())
+  implicit val timeMapping: BaseColumnType[LocalDateTime] =
+    MappedColumnType.base[LocalDateTime, Timestamp](
+      t => new Timestamp(t.atZone(ZoneId.systemDefault()).toEpochSecond),
+      ts => LocalDateTime.ofInstant(Instant.ofEpochMilli(ts.getTime), ZoneId.systemDefault())
     )
 
   implicit val phoneIdRowKeyMapping: BaseColumnType[PhoneId] =
@@ -41,7 +41,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Rep[Option[String]],
           Rep[Option[String]],
           Rep[Option[Boolean]],
-          Rep[Option[OffsetDateTime]]
+          Rep[Option[LocalDateTime]]
         ),
       LiftedDbPhoneRow,
       (
@@ -50,7 +50,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Option[String],
           Option[String],
           Option[Boolean],
-          Option[OffsetDateTime]
+          Option[LocalDateTime]
         ),
       Phone
     ](LiftedDbPhoneRow.tupled, (Phone.apply _).tupled)
@@ -163,7 +163,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
       phone = column[String]("phone").?,
       phoneType = column[String]("phone_type").?,
       primaryPhone = column[Boolean]("primary_phone").?,
-      updateTs = column[OffsetDateTime]("update_ts").?
+      updateTs = column[LocalDateTime]("update_ts").?
     )
 
     def * : lifted.ProvenShape[Phone] = p
