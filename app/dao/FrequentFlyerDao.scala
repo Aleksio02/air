@@ -76,4 +76,6 @@ class FrequentFlyerDao @Inject()(
       .filter(t => t.p.login.ilike(login))
       .result
   }*/
+
+  override protected def findByNameQuery(phone: String): profile.api.DBIO[Seq[FrequentFlyer]] = ???
 }

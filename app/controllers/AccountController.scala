@@ -16,8 +16,8 @@ import scala.concurrent.ExecutionContext
 
 @Singleton
 class AccountController @Inject()(
-                                 bodyParser: PlayBodyParsers,
-                                 phoneService: AccountService
+                                   bodyParser: PlayBodyParsers,
+                                   accountService: AccountService
                                )(implicit ec: ExecutionContext)
   extends InjectedController {
 
@@ -30,36 +30,36 @@ class AccountController @Inject()(
 
   def create: Action[Account] =
     Action.async(bodyParser.json[Account]) { r =>
-      EitherT(phoneService.create(r.body))
+      EitherT(accountService.create(r.body))
         .fold(t => BadRequest(t.getMessage), Ok(_))
     }
 
   def createList: Action[Seq[Account]] =
     Action.async(bodyParser.json[Seq[Account]]) { r =>
-      EitherT(phoneService.createList(r.body))
+      EitherT(accountService.createList(r.body))
         .fold(t => BadRequest(t.getMessage), Ok(_))
     }
 
   def update: Action[Account] =
     Action.async(bodyParser.json[Account]) { r =>
-      EitherT(phoneService.update(r.body))
+      EitherT(accountService.update(r.body))
         .fold(t => BadRequest(t.getMessage), Ok(_))
     }
 
   def delete(id: String): Action[AnyContent] = Action.async { _ =>
-    EitherT(phoneService.delete(AccountId(Integer.parseInt(id))))
+    EitherT(accountService.delete(AccountId(Integer.parseInt(id))))
       .fold(t => BadRequest(t.getMessage), Ok(_))
   }
 
   def findById(id: String): Action[AnyContent] = Action.async { _ =>
-    EitherT(phoneService.findById(AccountId(Integer.parseInt(id))))
+    EitherT(accountService.findById(AccountId(Integer.parseInt(id))))
       .fold(t => BadRequest(t.getMessage), Ok(_))
   }
 
-  /*def findByName(name: String): Action[AnyContent] = Action.async { _ =>
-    EitherT(phoneService.findByName(name))
+  def findByName(name: String): Action[AnyContent] = Action.async { _ =>
+    EitherT(accountService.findByName(name))
       .fold(t => BadRequest(t.getMessage), Ok(_))
-  }*/
+  }
 
   /*private def pathToFile(filename: Path): Path =
     Paths.get(s"/tmp/scv_files/$filename")

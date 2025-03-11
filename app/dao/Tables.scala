@@ -64,7 +64,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           Rep[String],
           Rep[String],
           Rep[Option[FrequentFlyerId]],
-          Rep[Option[OffsetDateTime]]
+          Rep[Option[LocalDateTime]]
         ),
       LiftedDbAccountRow,
       (
@@ -73,7 +73,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
           String,
           String,
           Option[FrequentFlyerId],
-          Option[OffsetDateTime]
+          Option[LocalDateTime]
         )
       ,
       Account
@@ -176,7 +176,7 @@ trait Tables extends HasDatabaseConfigProvider[JdbcProfile] {
       firstName = column[String]("first_name"),
       lastName = column[String]("last_name"),
       frequentFlyerId = column[FrequentFlyerId]("frequent_flyer_id").?,
-      updateTs = column[OffsetDateTime]("update_ts").?
+      updateTs = column[LocalDateTime]("update_ts").?
     )
 
     def * : lifted.ProvenShape[Account] = p

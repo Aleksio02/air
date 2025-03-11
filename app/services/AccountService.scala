@@ -45,9 +45,9 @@ class AccountService @Inject()(dao: AccountDao)(implicit
     })
   }
 
-  /*def findByName(
+  def findByName(
                   name: String
-                ): Future[Either[Throwable, Seq[WebPasswordRow]]] = {
-    EitherT(dao.findByName(name)).map(_.map(WebPasswordRow(_))).value
-  }*/
+                ): Future[Either[Throwable, Seq[Account]]] = {
+    EitherT(dao.findByName(name)).value
+  }
 }

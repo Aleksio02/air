@@ -25,7 +25,7 @@ object AccountId {
 }
 
 case class Account(accountId: AccountId, login: String, firstName: String, lastName: String,
-                   frequentFlyerId: Option[FrequentFlyerId], updateTs: Option[OffsetDateTime])
+                   frequentFlyerId: Option[FrequentFlyerId], updateTs: Option[LocalDateTime])
 
 object Account {
   implicit val format: Format[Account] = Json.format[Account]

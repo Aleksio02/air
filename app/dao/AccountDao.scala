@@ -58,11 +58,11 @@ class AccountDao @Inject()(
   }
 
   override def findByIdQuery(
-                                        id: AccountId
-                                      ): DBIO[Option[AccountView]] = {
+                              id: AccountId
+                            ): DBIO[Option[AccountView]] = {
     accounts
       .join(frequentFlyers)
-      .on{ case (account, flyer) => account.p.frequentFlyerId === flyer.p.frequentFlyerId }
+      .on { case (account, flyer) => account.p.frequentFlyerId === flyer.p.frequentFlyerId }
       .filter(t => t._1.p.accountId === id)
       .map { case (account, frequentFlyer) =>
         LiftedAccountView(
@@ -83,11 +83,22 @@ class AccountDao @Inject()(
       .headOption
   }
 
-  /*override protected def findByAccountQuery(
-      login: String
-  ): DBIO[Seq[Account]] = {
+  /*protected def findByNameQuery(
+                                  login: String
+                                ): DBIO[Seq[Account]] = {
     accounts
       .filter(t => t.p.login.ilike(login))
       .result
   }*/
+
+
+  // 2nd way
+  override protected def findByNameQuery(
+                                  login: String
+                                ): DBIO[Seq[Account]] = {
+    val pattern = s"${login.toLowerCase}%"
+    accounts
+      .filter(t => t.p.login.toLowerCase like pattern.bind)
+      .result
+  }
 }

@@ -47,7 +47,7 @@ object AccountGenerator {
       fn <- Gen.alphaStr
       ln <- Gen.alphaStr
       ffId <- Gen.chooseNum(1, 10).map(FrequentFlyerId(_))
-      uts <- Commons.optionGenOffsetDateTime
+      uts <- Commons.optionGenLocalDateTime
     } yield {
       Account(id, l, fn, ln, Option(ffId), uts)
     }

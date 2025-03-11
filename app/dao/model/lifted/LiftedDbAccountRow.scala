@@ -23,7 +23,7 @@ case class LiftedDbAccountRow(
                                firstName: Rep[String],
                                lastName: Rep[String],
                                frequentFlyerId: Rep[Option[FrequentFlyerId]],
-                               updateTs: Rep[Option[OffsetDateTime]])
+                               updateTs: Rep[Option[LocalDateTime]])
 
 
 case class LiftedDbPhoneRow(

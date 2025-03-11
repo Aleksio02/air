@@ -72,4 +72,6 @@ class PhoneDao @Inject()(
       .filter(t => t.p.phone.ilike(phone))
       .result
   }*/
+
+  override protected def findByNameQuery(phone: String): profile.api.DBIO[Seq[Phone]] = ???
 }

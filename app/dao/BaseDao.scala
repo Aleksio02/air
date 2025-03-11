@@ -46,12 +46,12 @@ trait BaseDao[DbEntityId, DbEntity, DbEntityView] extends Tables {
     .map(_.asRight)
     .recover(_.asLeft)
 
-  /*protected def findByPhoneQuery(phone: String): DBIO[Seq[DbEntity]]
+  protected def findByNameQuery(phone: String): DBIO[Seq[DbEntity]]
 
-  def findByPhone(phone: String): Future[Either[Throwable, Seq[DbEntity]]] = db
-    .run(findByPhoneQuery(phone))
+  def findByName(name: String): Future[Either[Throwable, Seq[DbEntity]]] = db
+    .run(findByNameQuery(name))
     .map(_.asRight)
-    .recover(_.asLeft)*/
+    .recover(_.asLeft)
 
   def getById(id: DbEntityId): Future[Either[Throwable, DbEntityView]] = db
     .run(findByIdQuery(id))
